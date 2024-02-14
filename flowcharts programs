@@ -1,0 +1,1050 @@
+//  c program for 123 triangle 
+#include<stdio.h>
+void main()
+{
+	int i,j;
+	for(i=1;i<=5;i++)
+	{
+		for(j=1;j<i*2;j++)
+		{
+
+			printf("%d ",j);
+
+
+		}
+		printf("\n");
+	}
+}
+
+
+
+
+// range between armstrong number
+
+#include<stdio.h>
+void main()
+{
+	int min,max,num,i,x,sum=0,c=0;
+	int temp,rem,samp,tag;
+	printf("enter min to  max values\n");
+	scanf("%d-%d",&min,&max);
+	if(min>=max)
+	{
+		samp=min;
+		min=max;
+		max=samp;
+	}
+	for(num=min;num<max;num++)
+	{
+		temp=num;
+		 sum=0,c=0;
+		 tag=num;
+		while(temp!=0)
+		{
+			temp=temp/10;
+			c++;
+		}
+		while(tag!=0)
+		{
+			rem=tag%10;
+			 i=1;
+			 x=c;
+			while(x!=0)
+			{
+				i=i*rem;
+				x--;
+			}
+			sum=sum+i;
+			tag=tag/10;
+		}
+		if(sum==num)
+
+			printf("armstrong num is %d\n",sum);
+
+	}
+}
+
+
+
+
+// c program binay to hexa
+
+#include<stdio.h>
+void main()
+{
+	int num,rem,sum=0;
+	int i=1;
+	printf("enter number\n");
+	scanf("%d",&num);
+	int temp=num;
+	while(temp!=0)
+	{
+		rem=temp%10;
+		sum=sum+rem*i;
+		i=i*2;
+		temp=temp/10;
+	}
+	printf("%x\n",num);
+}
+
+
+// c progrm  binary to octa
+
+
+#include<stdio.h>
+void main()
+{
+	int num,temp,rem,sum=0,i=1;
+	printf("enter number\n");
+	scanf("%d",&num);
+	temp=num;
+	while(temp!=0)
+	{
+		rem=temp%10;
+		sum=sum+rem*i;
+		i=i*2;
+		temp=temp/10;
+	}
+	printf("%o\n",sum);
+}
+
+
+
+// c program for check parallel or not
+
+#include<stdio.h>
+void main()
+{
+	int x1,x2,y1,y2,x3,x4,y3,y4;
+	int line1,line2;
+	printf("enter line1:\n");
+	scanf("%d-%d-%d-%d",&x1,&x2,&y1,&y2);
+	printf("enter line2:\n ");
+	scanf("%d-%d-%d-%d",&x3,&x4,&y3,&y4);
+	line1=( (y2-y1)/(x2-x1));
+	line2=((y4-y3)/(x4-x3));
+	if (line1==line2)
+	{
+		printf("parallel lines\n");
+	}
+	else
+	{
+		printf("not parallel lines\n");
+	}
+}
+
+
+// c program for decimal to binary
+
+
+#include<stdio.h>
+void main()
+{
+	int num,sum=0,rem,i=1,temp;
+	printf("enter number:\n");
+	scanf("%d",&num);
+	temp=num;
+	while(temp!=0)
+	{
+		rem=temp%2;
+		sum=sum+rem*i;
+		i=i*10;
+	
+		temp=temp/2;
+		
+
+	}
+	printf("%d\n",sum);
+}
+
+// c program for det matrix 
+
+#include<stdio.h>
+void main()
+{
+	int mat[3][3];
+	int i,j;
+	int a,b,c,d,e,f,g,h,det;
+	printf("enter matrix\n");
+
+	for(i=0;i<3;i++)
+	{
+		for(j=0;j<3;j++)
+		{
+			scanf("%d",&mat[i][j]);
+		}
+	}
+    a = mat[0][0];
+    b = mat[0][1];
+    c = mat[0][2];
+    d = mat[1][0];
+    e = mat[1][1];
+    f = mat[1][2];
+    g = mat[2][0];
+    h = mat[2][1];
+    i = mat[2][2];
+    det= (a*(e*i-f*h))-(b*(d*i-f*g))+(c*(d*h-e*g));
+    printf("%d\n",det);
+}
+
+ 
+ 
+
+
+// cprogram for print diamond
+
+#include <stdio.h>
+void printDiamond(int n) {
+    int i, j;
+
+    
+    for (i = 0; i < n; i++) {
+        // Print spaces
+        for (j = 0; j < n - i - 1; j++) {
+            printf(" ");
+        }
+
+        // Print asterisks
+        for (j = 0; j < 2 * i + 1; j++) {
+            printf("*");
+        }
+
+        printf("\n");
+    }
+
+   
+    for (i = n - 2; i >= 0; i--) {
+        // Print spaces
+        for (j = 0; j < n - i - 1; j++) {
+            printf(" ");
+        }
+
+        // Print asterisks
+        for (j = 0; j < 2 * i + 1; j++) {
+            printf("*");
+        }
+
+        printf("\n");
+    }
+}
+
+int main() {
+    int rows;
+
+    printf("Enter the number of rows for the diamond: ");
+    scanf("%d", &rows);
+
+    if (rows % 2 == 0) {
+        printf("Please enter an odd number for a symmetric diamond.\n");
+        return 1;
+    }
+
+    printDiamond(rows);
+
+    return 0;
+}
+
+// c program for print nth bit in left side
+
+#include<stdio.h>
+void main()
+{
+	int num,bit;
+	printf("enter decimal number:\n");
+	scanf("%d",&num);
+	printf("enter nth bit:\n");
+	scanf("%d",&bit);
+			num=num<<bit;
+
+	printf("%d\n",num);
+      	
+}
+
+
+
+
+// c program for print nth bit in right side
+
+
+void main()
+{
+	int num,bit;
+	printf("enter number:\n");
+	scanf("%d",&num);
+	printf("enter nth bit for rorate right side:\n");
+	scanf("%d",&bit);
+	num=num>>bit;
+	printf("after rotate right side decimal value is : %d\n",num);
+}
+
+// c program for factorial range
+
+#include<stdio.h>
+
+int main() {
+    int range, sum = 0;
+    printf("Enter range:\n");
+    scanf("%d", &range);
+
+    for (int j = 1; j <= range; j++) {
+        int fact = 1;
+        for (int i = 1; i <= j; i++) {
+            fact = fact * i;
+        }
+        sum = sum + fact;
+    }
+
+    printf("%d\n", sum);
+
+    return 0;
+}
+
+// c program for print small and big number
+
+#include<stdio.h>
+void main()
+{
+	int a,b,c,d;
+	printf("enter four numbers\n");
+	scanf("%d-%d-%d-%d",&a,&b,&c,&d);
+	if((a>b)&&(a>c)&&(c>d))
+		printf("a is big %d\n",a);
+	else if ((b>c)&&(b>d))
+		printf("b is big %d \n",b);
+	else if(c>d)
+		printf("c is big %d \n",c);
+	else 
+		printf("d is big %d \n",d);
+	if((a<b)&&(a<c)&&(a<d))
+		printf("a is small %d \n",a);
+	else if ((b<c)&&(b<d))
+		printf("b is small %d \n",b);
+	else if(c<d)
+		printf("c is small %d \n",c);
+	else
+		printf("d is small %d \n",d);
+
+}
+
+
+// cprogram for LCM NUMBER
+
+#include <stdio.h>
+
+int main() {
+    int num_count;
+
+    printf("Enter the number of elements: ");
+    scanf("%d", &num_count);
+
+    int user_numbers[num_count];
+
+    for (int i = 0; i < num_count; i++) {
+        printf("Enter number %d: ", i + 1);
+        scanf("%d", &user_numbers[i]);
+    }
+
+    int result_lcm = 1;
+
+    for (int i = 0; i < num_count; i++) {
+        int x = result_lcm;
+        int y = user_numbers[i];
+
+        while (y != 0) {
+            int temp = y;
+            y = x % y;
+            x = temp;
+        }
+
+        result_lcm = (result_lcm * user_numbers[i]) / x;
+    }
+
+    printf("The LCM of ");
+    printf(" is: %d\n", result_lcm);
+
+    return 0;
+}
+
+// c program for check leap year or not
+
+#include<stdio.h>
+void main()
+{
+	int year;
+	printf("enter year\n");
+	scanf("%d",&year);
+	if((year%100!=0)&&(year%4==0)||(year%400==0))
+	{
+		printf("leap year\n");
+	}
+		else
+		{
+			printf("not leap\n");
+	}
+}
+
+// check leap year in between range
+
+#include<stdio.h>
+void main()
+{
+	int min,max;
+	printf("enter year range:\n");
+	scanf("%d-%d",&min,&max);
+	for(int i=min;i<=max;i++)
+	{
+		if((i%100!=0)&&(i%4==0)||(i%400==0))
+		{
+			printf("leap year is %d\n",i);
+
+		}
+		else
+			printf(" not leap year is %d\n",i);
+		
+	}
+}
+
+// c program for print sum of lower triangle of matrix
+
+#include<stdio.h>
+void main()
+{
+	int mat[3][3];
+	int sum=0;
+	int k,l;
+	printf("enter matrix:\n");
+	for(int i=0;i<3;i++)
+	{
+		for(int j=0;j<3;j++)
+		{
+			scanf("%d",&mat[i][j]);
+		}
+	}
+	for( k=0;k<3;k++)
+	{
+		for( l=0;l<3;l++)
+		{
+			if(k>=l)
+			{
+				sum=sum+mat[k][l];
+			}
+		}
+	}
+	printf("lower triangle sum is :%d\n",sum);
+}
+ // c program for print LSB bit 
+ 
+ #include<stdio.h>
+void main()
+{
+	int num;
+	printf("enter number:\n");
+	scanf("%d",&num);
+	for(int i=0;i<16;i++)
+	{
+		if(i==0)
+		{
+			if(num&0x1<<i)
+				printf("LSB IS : 1\n");
+				else
+					printf("LSB IS : 0\n");
+		}
+		if(i==16)
+		{
+			if(num&0x1<<i)
+				printf("MSB BIT IS :1 \n");
+			else
+				printf("MSB BIT IS :0 \n");
+	}
+}
+}
+
+//c program for print sum in between range without divisible by 5
+
+
+#include<stdio.h>
+void main()
+{
+	int min,max,sum=0;
+	printf("enter numbers\n");
+	scanf("%d-%d",&min,&max);
+	if(min>max)
+	{
+		int temp =min;
+		min=max;
+		max=temp;
+	}
+
+	while(min<max)
+	{
+		if(min%5==0)
+		{
+			min++;
+		}
+		else
+		{
+			sum=sum+min;
+			min++;
+		}
+	}
+	printf("sum=%d\n",sum);
+}
+
+
+// cprogram for print multiplication of matrix
+
+#include<stdio.h>
+
+int main() {
+    int r, c;
+    
+    printf("Enter rows and columns:\n");
+    scanf("%d-%d", &r, &c);
+
+    int mat1[r][c], mat2[r][c], mat3[r][c];
+
+    printf("Enter matrix1:\n");
+    for (int i = 0; i < r; i++) {
+        for (int j = 0; j < c; j++) {
+            scanf("%d", &mat1[i][j]);
+        }
+    }
+
+    printf("Enter matrix2:\n");
+    for (int i = 0; i < r; i++) {
+        for (int j = 0; j < c; j++) {
+            scanf("%d", &mat2[i][j]);
+        }
+    }
+
+    // Initialize mat3 to zeros
+    for (int i = 0; i < r; i++) {
+        for (int j = 0; j < c; j++) {
+            mat3[i][j] = 0;
+        }
+    }
+
+    // Matrix multiplication
+    for (int i = 0; i < r; i++) {
+        for (int j = 0; j < c; j++) {
+            for (int k = 0; k < c; k++) {
+                mat3[i][j] = mat3[i][j] + mat1[i][k] * mat2[k][j];
+            }
+        }
+    }
+
+    printf("Result Matrix:\n");
+    for (int i = 0; i < r; i++) {
+        for (int j = 0; j < c; j++) {
+            printf("%d ", mat3[i][j]);
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
+
+
+ //c program for nth bit status
+ 
+ #include<stdio.h>
+void main()
+{
+	int num,bit;
+	printf("enter number:\n");
+	scanf("%d",&num);
+	printf("enter bit position:\n");
+	scanf("%d",&bit);
+	for(int i=0;i<16;i++)
+		{
+			if(bit==i)
+			{
+				if(num&(0x1<<i))
+					printf("nth bit is :1\n");
+				else 
+					printf("nth bit is : 0\n");
+			}
+		}
+}
+// nth bit toggle
+
+#include<stdio.h>
+void main()
+{
+	int num,bit;
+	printf("enter number:\n");
+	scanf("%d",&num);
+	printf("enter bit pos is 1 to 15 :\n");
+	scanf("%d",&bit);
+	for(int i=0;i<=15;i++)
+	{
+		if(bit==i)
+		{
+			num=num^bit;
+
+		}
+        } 
+
+	printf("%d\n",num);
+}
+
+
+// cprogram for  number series
+
+#include<stdio.h>
+void main()
+{
+	int range;
+	printf("enter range\n");
+	scanf("%d",&range);
+	int count=1;
+	while(count<=range)
+	{
+		printf("%d %d ",count*1,count*2);
+		count=count+2;
+	}
+}
+// cprogram for pascaltriangle
+
+//pascal triangle
+
+#include<stdio.h>
+int main()
+{
+	int i,j,k,c,n;
+	printf("enter rows: ");
+	scanf("%d",&n);
+	for(i=0;i<n;i++)
+	{
+		for(j=1;j<=n-i;j++)
+		{
+			printf("  ");
+		}
+		for(k=0;k<=i;k++)
+		{
+			if(i==0||k==0)
+				c=1;
+			else
+				c=c*(i-k+1)/k;
+			printf("%4d",c);
+		}
+		printf("\n");
+	}
+}
+
+
+// cprogram for prime number in between range
+
+#include<stdio.h>
+void main()
+{
+	int max,min;
+	printf("enter range:\n");
+	scanf("%d-%d",&max,&min);
+	int i,j,c1=0;
+	for(i=max+1;i<min;i++)
+	{
+		int c=0;
+		for(j=1;j<i;j++)
+		{
+			if(i%j==0)
+			{
+				c++;
+			}
+	
+		}
+		if(c==1)
+		{
+			c1++;
+	printf("%d ",i);
+	}
+	}
+	printf("total prime num: %d\n",c1);
+}
+
+// cprogram for reverse number
+
+#include<stdio.h>
+void main()
+{
+	int num,temp,rem,sum=0;
+	printf("enter number:\n");
+	scanf("%d",&num);
+	temp=num;
+	while(temp!=0)
+	{
+		rem=temp%10;
+		sum=sum*10+rem;
+		temp=temp/10;
+	}
+	printf("reverse number is : %d\n",sum);
+}
+
+// c program for find day
+
+#include <stdio.h>
+#include<math.h>
+
+int main() {
+    int day, month, year;
+
+    // Getting user input for the date
+    printf("Enter date (day month year): ");
+    scanf("%d %d %d", &day, &month, &year);
+
+
+    if (month < 3) {
+        month += 12;
+        year--;
+    }
+
+    int K = year % 100;
+    int J = year / 100;
+
+    int dayOfWeek = (day + ((13 * (month + 1)) / 5) + K + (K / 4) + (J / 4) - (2 * J)) % 7;
+
+    // Converting the result to match the day of the week (0 = Saturday, 1 = Sunday, ..., 6 = Friday)
+    if (dayOfWeek < 0) {
+        dayOfWeek += 7;
+    }
+
+    // Printing the day of the week
+    switch (dayOfWeek) {
+        case 0:
+            printf("Saturday\n");
+            break;
+        case 1:
+            printf("Sunday\n");
+            break;
+        case 2:
+            printf("Monday\n");
+            break;
+        case 3:
+            printf("Tuesday\n");
+            break;
+        case 4:
+            printf("Wednesday\n");
+            break;
+        case 5:
+            printf("Thursday\n");
+            break;
+        case 6:
+            printf("Friday\n");
+            break;
+    }
+
+    return 0;
+}
+
+// c program for root quadratic
+
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    double a, b, c, discriminant, root1, root2;
+
+    // Input coefficients
+    printf("Enter coefficients (a, b, c): ");
+    scanf("%lf %lf %lf", &a, &b, &c);
+
+    // Calculate discriminant
+    discriminant = b * b - 4 * a * c;
+
+    // Check the nature of the roots
+    if (discriminant > 0) {
+        root1 = (-b + sqrt(discriminant)) / (2 * a);
+        root2 = (-b - sqrt(discriminant)) / (2 * a);
+        printf("Roots are real and different.\n");
+        printf("Root 1 = %.2lf\n", root1);
+        printf("Root 2 = %.2lf\n", root2);
+    } else if (discriminant == 0) {
+        root1 = root2 = -b / (2 * a);
+        printf("Roots are real and the same.\n");
+        printf("Root 1 = Root 2 = %.2lf\n", root1);
+    } else {
+        double realPart = -b / (2 * a);
+        double imaginaryPart = sqrt(-discriminant) / (2 * a);
+        printf("Roots are complex and different.\n");
+        printf("Root 1 = %.2lf + %.2lfi\n", realPart, imaginaryPart);
+        printf("Root 2 = %.2lf - %.2lfi\n", realPart, imaginaryPart);
+    }
+
+    return 0;
+}
+
+
+// cprogram for convert sec into hours
+
+#include<stdio.h>
+void main()
+{
+	int sec,hrs,min;
+	printf("enter seconds:\n");
+	scanf("%d",&sec);
+	hrs=(sec/60)/60;
+	min=(sec/60)%60;
+	sec=sec%60;
+	printf("%dh-%dm-%ds\n",hrs,min,sec);
+}
+
+// c program for set of combinations in 3 character string
+
+ 
+ #include<stdio.h>
+void main()
+{
+	char str[100];
+	printf("enter string:\n");
+	scanf("%s",str);
+	for(int i=0;str[i]!='\0';i++)
+	{
+		for(int j=0;str[j]!='\0';j++)
+		{
+			for(int k=0;str[k]!='\0';k++)
+			{
+				if(str[i]!=str[j]&&str[j]!=str[k]&&str[k]!=str[i])
+					printf("%c %c %c\n",str[i],str[j],str[k]);
+			}
+		}
+	}
+}
+
+// c program for space triangle
+#include <stdio.h>
+
+int main() {
+    int rows, i, j, space;
+
+    printf("Enter the number of rows: ");
+    scanf("%d", &rows);
+
+    for (i = 1; i <= rows; i++) {
+        for (space = 1; space <= rows - i; space++) {
+            printf(" ");
+        }
+
+        for (j = 1; j <= 2 * i - 1; j++) {
+            printf("*");
+        }
+
+        printf("\n");
+    }
+
+    return 0;
+}
+
+// c program for square
+
+#include<stdio.h>
+void main()
+{
+	int r,c;
+	printf("enter rows  and colums\n");
+	scanf("%d-%d",&r,&c);
+	for(int i=1;i<=r;i++)
+	{
+		for(int j=1;j<=c;j++)
+		{
+			if((i==1)||(i==r)||(j==1)||(j==r))
+			{
+				printf("#");
+			}
+			else if ((i<=j)||(j!=r))
+			{
+		            printf(" ");
+			}
+
+		}
+		printf("\n");
+	}
+
+}
+
+// c program for check string anagram
+
+#include<stdio.h>
+#include<string.h>
+void main()
+{
+	char str1[100];
+	char str2[100];
+	int i,j,l1,l2,c,c1=0,sum=0;
+	printf("enter string1:\n");
+	scanf("%s",str1);
+	printf("enter string2:\n");
+	scanf("%s",str2);
+
+	l1=strlen(str1);
+	l2=strlen(str2);
+	if(l1==l2)
+	{
+	for(i=0;str1[i]!='\0';i++)
+	{
+		c=0;
+		for(j=0;str2[j]!='\0';j++)
+		{
+	
+			if(str1[i]==str2[j])
+			{
+
+				c++;
+				if(c==1)
+					sum=sum+c;
+			}
+			else 
+				c1++;
+		
+		}
+
+	}
+	if((c1==0)||(sum==l1))
+		printf("anagram\n");
+	else
+		printf("not anagram\n");
+
+	}
+	else if(l1!=c)
+	{
+		printf("not anagram\n");
+	}
+
+}
+
+//  c program for print string dictionary
+
+#include<stdio.h>
+#include<string.h>
+void main()
+{
+	char str[100];
+	int temp;
+	printf("enter string:\n");
+	scanf("%s",str);
+	for(int j=0;str[j]!='\0';j++)
+	{
+		for(int k=j+1;str[k]!='\0';k++)
+		{
+		if(str[j]>str[k])
+		{
+			temp=str[j];
+			str[j]=str[k];
+			str[k]=temp;
+		}
+	}
+	}
+	 /*for(int i=0;str[i]!='\0';i++)
+	 {
+		 printf("%c",str[i]);
+	 }*/
+	printf("%s\n",str);
+}
+
+// c program for sum matrix
+
+#include<stdio.h>
+void main()
+{
+	int mat1[2][2];
+	int mat2[2][2];
+	int mat3[2][2];
+	printf("enter mat1\n");
+	for(int i=0;i<2;i++)
+	{
+		for(int j=0;j<2;j++)
+		{
+		scanf("%d",&mat1[i][j]);
+	}
+	}
+	printf("enter mat2\n");
+	for(int i=0;i<2;i++)
+	{
+		for(int j=0;j<2;j++)
+		{
+          	scanf("%d",&mat2[i][j]);
+		}
+	}
+	printf("output is:\n");
+	for(int i=0;i<2;i++)
+	{
+		for(int j=0;j<2;j++)
+		{
+			printf("%d ",mat1[i][j]+mat2[i][j]);
+		}
+		printf("\n");
+	}
+}
+ // c program for swap without temp variable
+ 
+ #include<stdio.h>
+void main()
+{
+	int a,b;
+	printf("enter number1 and number2\n");
+	scanf("%d-%d",&a,&b);
+	a=a+b;
+	b=a-b;
+	a=a-b;
+	printf("a= %d,b=%d\n",a,b);
+}
+
+// c progranm for transpose matrix
+
+#include<stdio.h>
+void main()
+{
+	int mat[2][2];
+	int mat1[2][2];
+	printf("enter mat1\n");
+	for(int i=0;i<2;i++)
+	{
+		for(int j=0;j<2;j++)
+		{
+			scanf("%d",&mat[i][j]);
+		}
+	}
+	for(int i=0;i<2;i++)
+	{
+		for(int j=0;j<2;j++)
+		{
+			mat1[j][i]=mat[i][j];
+		}
+	}
+	printf("\n");
+	 for(int i=0;i<2;i++)
+        {
+                for(int j=0;j<2;j++)
+                {
+                       printf("%d ",mat1[i][j]);
+                }
+		printf("\n");
+
+        }
+
+}
+
+// c program for print vowels
+#include<stdio.h>
+void main()
+{
+	char str[100], c=0,c1=0;
+	//int i,j;
+	printf("enter string\n");
+	scanf("%s",str);
+
+	for(int i=0;str[i]!='\0';i++)
+	{
+		if((str[i]=='a')||(str[i]=='e')||(str[i]=='i')||(str[i]=='o')||(str[i]=='u'))
+		{
+			c++;
+		}
+		else
+		{
+			c1++;
+	}
+	}
+	printf("vowels is %d\n constraints is %d\n",c,c1);
+	
+}
+
+
