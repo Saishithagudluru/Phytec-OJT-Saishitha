@@ -1,0 +1,17 @@
+CMD+RESET
+
+CMD+WIFIMODE=1
+
+CMD+CONTOAP=PHYTEC_ACC,acc@phytec
+
+CMD?WIFI
+
+CMD+MQTTNETCFG=dev.rightech.io,1883
+
+CMD+MQTTCONCFG=3,00A1B1000000,,,,,,,,,
+
+CMD+MQTTSTART=1
+
+CMD+MQTTSUB=phyin_smart_switch_devcontrol
+
+CMD+MQTTPUB=
