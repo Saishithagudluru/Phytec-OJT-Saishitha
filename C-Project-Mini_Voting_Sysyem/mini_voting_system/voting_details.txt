@@ -1,0 +1,25 @@
+Name: saishitha
+Age: 21
+Voter ID: 1000
+Voted for: PartyA
+
+Name: asdf
+Age: 33
+Voter ID: 1001
+Voted for: PartyA
+
+Name: Pujjitha
+Age: 21
+Voter ID: 1005
+Voted for: PartyA
+
+Name: Krishna
+Age: 22
+Voter ID: 1007
+Voted for: PartyB
+
+Name: Phanidhar
+Age: 30
+Voter ID: 1009
+Voted for: PartyB
+
