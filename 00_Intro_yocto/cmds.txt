@@ -1,0 +1,62 @@
+		Build Workflow
+
+
+
+cd poky
+
+cd bitbake
+
+ls
+
+cd bin
+
+ls
+
+vi bitbake
+
+vi bitbake-layer
+
+we alredy placed bitbake/bin in PATH variable so that we can find it
+
+
+cd meta-poky
+
+ls
+
+vim conf/bblayers.conf.sample
+
+vim conf/local.conf.sample
+
+
+cd ../meta-yocto-bsp
+
+cd conf
+
+cd machine
+
+ls
+
+cd ../../../
+
+cd scripts
+
+ls
+
+cd build/downloads
+
+ls | wc -l
+
+temp dir contains buid output and size in GB
+
+du -sh tmp/
+
+bitbake -e core-image-minimal | grep ^BB_NUMBER_THREADS=
+
+nproc
+
+
+
+
+
+
+

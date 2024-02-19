@@ -1,0 +1,36 @@
+yocto download steps:-
+
+
+mkdir yocto
+ 
+ cd yocto/
+ 
+ mkdir source
+ 
+ cd source/
+ 
+ ls
+ 
+ git clone https://git.yoctoproject.org/poky -b kirkstone
+ 
+ ls
+ 
+ cd poky/
+ 
+ ls -l
+ 
+ source oe-init-build-env ../../build
+ 
+ bitbake -h   (if not working give traceback error for unsupported locale setting then give cmnd $export LC_ALL=C )
+ 
+bitbake -h
+
+echo $PATH
+
+bitbake -c cleanall openssl
+
+bitbake openssl
+
+bitbake core-image-minimal
+ 
+
