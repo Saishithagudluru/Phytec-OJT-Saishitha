@@ -1,0 +1,79 @@
+                      ####   KERNEL BANNER NAME CHANGE  #####
+
+
+     
+     
+     
+     
+go to website github.ruggedboard  linux-rba5d2x go to the  repository. open linux-rba5d2x branch
+ 
+
+cick on code
+download zip file and extract that
+
+
+open the path  linux on terminal
+
+
+enable tool chain by using  this command
+ /opt/poky-tiny/2.5.2/environment-setup-cortexa5hf-neon-poky-linux-musleabi
+
+
+
+go to init/version.c file on terminal 
+
+
+change the banner name  and save it
+
+
+
+make rb_a5d2x_defconfig
+
+
+ make dtbs
+ 
+ make
+
+
+
+
+
+copy the z-IMage and .dtb images by using  below commands 
+
+
+cp z-Image /var/lib/tftpboot/
+
+ cp  a5d2x-rugged_board.dtb  /var/lib/tftpboot/
+ 
+ 
+ 
+ 
+RUGGED BOARD TERMINAL FOR NOR SET UP  ON USE THIS BELOW COMMANDS
+ 
+ 
+setenv ipaddr 192.168.1.20
+setenv serverip 192.168.1.247
+ping 192.168.1.247
+saveenv
+ 
+ 
+ 
+ sf probe
+tftp 0x21F60000 zImage
+sf erase 0xB0000 0x500000
+sf write 0x21F60000 0xB0000 0x500000
+
+
+
+
+sf probe
+tftp 0x21F70000 a5d2x-rugged_board.dtb
+sf erase 0xA0000 0x10000
+sf write 0x21F70000 0xA0000 0x10000
+
+
+reset
+
+
+
+
