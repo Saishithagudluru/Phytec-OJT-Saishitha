@@ -1,0 +1,166 @@
+Devshell - Development Shell
+-----------------------------
+
+The Yocto build system handles all the steps needed to build software from scratch by following the Yocto recipes. 
+When editing packages or debugging build failures, a development shell can be a useful tool.
+
+What is devshell?
+-----------------
+
+The devshell is a terminal shell that runs in the same context as the BitBake task engine
+
+In the new terminal, all the environment variables needed for the build are still defined, so we can use commands such as configure and make
+
+The commands execute just as if the build system was executing them.
+
+Command:
+----------
+
+$ bitbake -c devshell <recipename>
+
+$ bitbake -c devshell myhello
+
+What happens when you run the command?
+--------------------------------------
+
+Starts a shell whose environment is set up for development, debugging, or both.
+
+All tasks up to and including do_patch are run for the specified target
+
+Then, a new terminal is opened and you are placed in ${S}, the source directory.
+
+When you are finished using devshell, exit the shell or close the terminal window.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Devshell
+-----------
+
+Devshell provides you with an interactive shell with all the appropriate variables set for cross-compiling
+
+$ echo $CC
+
+$ echo $PATH
+
+$ echo $CXX
+
+$ echo $LDFLAGS
+
+$ echo $CFLAGS
+
+Now you can make modifications and compile and generate an executable
+
+$ ${CC} -DUSE_SYSCALL userprog.c ${LDFLAGS} -o userprog
+
+Try other recipes which we wrote for example mymakefile
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Devshell
+----------
+
+To manually run a specific task using devshell, run the corresponding run.* script in the ${WORKDIR}/temp directory (e.g., run.do_configure.pid)
+
+If a task's script does not exist, you can create the task by first running it outside of the devshell:
+
+$ bitbake -c task
+
+Execution of a task's run.* script and BitBake's execution of a task are identical.
+
+In other words, running the script re-runs the task just as it would be run using the bitbake -c command.
+
+Any run.* file that does not have a .pid extension is a symbolic link (symlink) to the most recent version of that file.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Devshell
+----------
+
+It is important to bear in mind that all changes made inside devshell are not persistent between builds; thus, we must be careful to record any change that is important, prior to leaving it
+
+As we have the source at our disposal, we can use it to generate extra patches.
+
+One very practical way of doing that is using Git and git format-patch to create the patch to be included in the recipe afterwards.
+
+If the recipe doesn't use git, we need to create repository
+
+$ git init
+
+$ git add userprog.c 
+
+$ git commit -m "First commit"
+
+Make Modifications
+
+$ git status
+
+$ git add userprog.c
+
+$ git commit -m "Second Commit"
+
+$ git format-patch -1 -o ~/Yocto_Training/source/meta-mylayer/recipes-examples/myhello/files/
+
+Update SRC_URI now
+
+
+
+
+
+
+

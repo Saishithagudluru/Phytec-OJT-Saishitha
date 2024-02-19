@@ -1,0 +1,222 @@
+Understanding file searching paths
+----------------------------------
+
+When a file (a patch or a generic file) is included in SRC_URI, Bitbake searches for FILESPATH and FILESEXTRAPATH variables.
+
+The default value for the FILESPATH variable is defined in the base.bbclass class found in meta/classes
+
+FILESPATH = "${@base_set_filespath(["${FILE_DIRNAME}/${BP}", "${FILE_DIRNAME}/${BPN}", "${FILE_DIRNAME}/files"], d)}"
+
+$ bitbake -e myhello | grep ^BP=				--->gives package name and version
+
+$ bitbake -e myhello | grep ^BPN= 				--->gives package name
+
+The value is a colon-separated list of directories that are searched left-to-right in order.
+
+The default setting is to look in the following locations:
+
+	<recipe>-<version>
+	<recipe>
+	<files>
+
+
+$ bitbake -e myhello | grep ^FILESPATH=
+
+Note:  Do not hand-edit the FILESPATH variable
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FILESOVERRIDES
+---------------
+
+Custom paths and files can be added using FILESEXTRAPATHS and FILESOVERRIDES.
+
+The FILESPATH variable is automatically extended using the overrides from the FILESOVERRIDES variable.
+
+FILESOVERRIDES = "${MACHINEOVERRIDES}:${DISTROOVERRIDES}"
+
+$ bitbake -e myhello | grep ^FILESOVERRIDES=
+
+$ bitbake -e myhello | grep ^FILESPATH= | grep x86-64
+
+You can take advantage of this searching behavior in useful ways. 
+
+Try: Change the MACHINE  in local.conf and check FILESOVERRIDES value
+
+For example, you want to have different defconfigs for different Machines
+
+     files/defconfig
+     files/MACHINEA/defconfig
+     files/MACHINEB/defconfig
+
+SRC_URI = "file://defconfig"
+
+When MACHINE = MACHINEA build system uses files from files/MACHINEA.
+When MACHINE = MACHINEB build system uses files from files/MACHINEB.
+For other machines, it will uses files/defconfig
+
+
+-------------------------------------------------------------------------------------
+lets see check two different MACHINE file in same recipe and by simply changing the
+MACHINE varible to differnt machine the recipe compile to different machine.
+--------------------------------------------------------------------------------------
+
+ 
+let goto the conf/local.conf and change MACHINE valiabee
+
+MACHINE ?= "qemuarm"
+
+$ bitbake -e myhello | grep ^FILESOVERRIDES=
+
+$ bitbake -e myhello | grep ^FILESPATH= | grep qemuarm
+
+then goto my layer meta-mylayer
+
+$ cd myhello/files
+
+$ mkdir qemuarm
+
+$ vim userprog.c
+---------------------------------------------
+#inclue <stdio.h>
+
+int main()
+{
+	printf("Hello QemuARM\n");
+	return 0;
+	
+}
+
+---------------------------------------------------
+
+$ bitbake myhello
+
+$ bitbake -e myhello | grep ^WORKDIR=
+
+$ cd {WORKDIR}
+
+now letus change the MACHINE variable again in conf/local.conf
+
+MACHINE ??= "qemu-x86-64"
+
+$ bitbake myhello
+
+$ bitbake -e myhello | grep ^WORKDIR=
+
+$ cd {WORKDIR}
+
+
+======================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FILESEXTRAPATHS
+----------------
+
+Extends the search path the OpenEmbedded build system uses when looking for files and patches as it processes recipes and append files.
+
+FILESEXTRAPATHS:prepend := "${THISDIR}:"
+
+THISDIR		The directory in which the file BitBake is currently parsing is located.
+
+Best practices dictate that you accomplish this by using FILESEXTRAPATHS from within a .bbappend file and that you prepend paths as follows:
+
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
+
+
+
+================================================================================
+Now lets see if have in myrecipe (say myhello) a folder other than files say phy
+so how to add this folder in FILEPATH variable using FILESEXTRAPATHS variable
+================================================================================
+
+$ cd myhello
+
+$ mkdir phy
+
+$ bitbake myhello
+
+goto myhello recipe and open .bb file
+
+edit 
+
+FILESEXTRAPATHS:prepend := "${THISDIR}/phy:"
+
+$ bitbake myhello
+
+====================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    
+

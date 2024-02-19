@@ -1,0 +1,29 @@
+Creating Layer Manually
+
+cd source
+
+mkdir meta-mylayer
+
+cd meta-mylayer
+
+mkdir conf
+
+cd conf
+
+ls
+
+cp ../../poky/meta-skeleton/conf/layer.conf .
+
+vim layer.conf (replace skeleton with mylayer)
+
+cd ..
+
+ls
+
+cd ../../build
+
+vim conf/bblayer.conf
+
+bitbake-layers show-layers
+
+cat ../source/meta-mylayer/conf/layer.conf

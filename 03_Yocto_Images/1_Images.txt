@@ -1,0 +1,157 @@
+		Yocto_Image
+	      --------------
+
+
+
+
+
+What is an image
+--------------------
+
+Image is a top level recipe. (It inherits an image.bbclass)
+
+Building an image creates an entire Linux distribution from source
+
+        Compiler, tools, libraries
+        BSP: Bootloader, Kernel
+        Root filesystem:
+                ● Base OS
+                ● services
+                ● Applications
+                ● etc
+
+Creating custom images
+------------------------
+
+You often need to create your own Image recipe in order to add new packages or functionality
+
+Two ways
+------------
+
+a) creating an image from scratch
+b) extend an existing recipe (preferable)
+
+
+
+
+
+
+
+
+Package group
+--------------
+
+A package group is a set of packages that can be included on any image.
+
+A package group can contain a set of packages.
+
+Using the packagegroup name in IMAGE_INSTALL variable install all the packages defined by the package group into the root file system of your target image.
+
+There are many package groups. There are present in subdirectories named "packagegroups"
+
+$ find . -name 'packagegroups'
+
+They are recipe files(.bb) and starts with packagegroup- 
+
+For example, 
+
+packagegroup-core-boot: Provides the minimum set of packages necessary to create a bootable image with console.
+
+exp:----
+
+$ cd source/poky/meta/
+
+$ find recipes-*/ -name 'packagegroups'
+
+$ ls recipes-core/packagegroups  
+
+$ vim recipes-core/packagegroups/packagegroup-core-boot.bb
+
+  	
+
+
+
+
+
+
+
+
+Creating an image from scratch
+-------------------------------
+
+The simplest way is to inherit the core-image bbclass, as it provides a set of image features that can be used very easily
+
+
+inherit core-image
+Which tells us that the definition of what actually gets installed is defined in the core-image.bbclass.
+
+$ vim source/poky/meta/classes/core-image.bbclass
+
+Image recipes set IMAGE_INSTALL to specify the packages to install into an image through image.bbclass.
+ 
+Create an images directory
+
+$ mkdir recipes-examples/images
+
+Create the image recipe
+
+$ vi recipes-examples/images/phy-image.bb
+
+SUMMARY = "A small boot image for SBCS learners"
+LICENSE = "MIT"
+inherit core-image
+# Core files for basic console boot
+#IMAGE_INSTALL = "packagegroup-core-boot"
+#IMAGE_ROOTFS_SIZE ?= "8192"
+#Add our needed applications
+#IMAGE_INSTALL += "usbutils"
+
+
+
+bitbake -e phy-image | grep ^IMAGE_INSTALL=
+
+bitbake phy-image
+
+
+
+
+
+
+
+
+
+Reusing an existing image
+--------------------------
+
+When an image mostly fits our needs and we need to do minor adjustments on it,it is very convenient to reuse its code
+
+This makes code maintenance easier and highlights the functional differences
+
+For example, if we want to include an application (lsusb)
+
+Create another recipe:
+
+$ vim recipes-examples/images/phy-image-reuse.bb
+
+	require recipes-core/images/core-image-minimal.bb
+
+$ bitbake -e phy-image | grep ^IMAGE_INSTALL=
+	IMAGE_INSTALL_append = " usbutils"
+	
+
+$ bitbake -e phy-image | grep ^IMAGE_INSTALL=
+
+
+NOTE:-  require is used for receipes and 
+	Inherit is use for bbclasses
+
+
+
+
+
+
+
+
+
+
+

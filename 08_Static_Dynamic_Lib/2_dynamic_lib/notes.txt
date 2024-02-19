@@ -1,0 +1,367 @@
+How to create the dynamic library
+===================================
+
+Step1: Create object files using the below command
+
+        $ gcc -fPIC -c print.c arith.c
+
+the -fPIC flag stands for Position Independent Code, a characteristic required by shared libraries
+Position-independent code is code that can be executed at any memory address, which is necessary for shared libraries (dynamic link libraries) because they can be loaded at different memory locations in different processes.
+
+Step2: Create the library
+
+        $ gcc -shared -Wl,-soname,libphy.so.1 -o libphy.so.1.0 *.o
+
+The -shared key tells the compiler to produce a shared object which can then be linked with other objects to form an executable.
+
+-Wl flag passes an options to linker with following format -Wl,options
+        in case of our example it sets the name of library, as it will be passed to the linker.
+
+-Wl,-soname,libphy.so.1: This is a linker option (-Wl) passed to GCC. It specifies that the shared library should have a soname of libphy.so.1. The soname is used to identify the library and its version, allowing for version compatibility when linking against it.
+
+
+step3: Create Symbolic link
+
+	$ ln -s libphy.so.1.0 libphy.so.1
+	$ ln -s libphy.so.1 libphy.so
+	$ ln -al
+
+
+step4: Compile the userprog.c using dynamic library (if it is present in same directory) 
+
+	$ gcc userprog.c -o userprog -lphy -L.
+	$ ./userprog
+
+
+
+step4: Compile the userprog.c using dynamic library ( if it present in different folder let say temp)
+
+	$ gcc userprog.c -o userprog -lphy -L.. -I..
+	$ export LD_LIBRARY_PATH=../
+	$ ./userprog 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Shared Library Names
+=======================
+
+Dynamic libraries follow certain naming conventions on running systems so that multiple versions can co-exist
+
+Linux shared library can have three names. Which are:
+
+	Linker name (eg: libexample.so)
+	Soname (eg : libexample.so.1.2)
+	Real Name (eg : libexample.so.1.2.3)
+
+Linker Name
+==============
+
+Linker Name is the name that is requested by the linker when another code is linked with your library (with –lexample linker option). 
+
+Linker name typically starts with
+	the prefix lib
+	name of the library
+	the phrase .so
+
+soname
+=============
+
+Every shared library has a special name called the ``soname''.
+
+The soname has 
+	the prefix ``lib'', 
+	the name of the library, 
+	the phrase ``.so'', 
+	followed by a period 
+	and a version number that is incremented whenever the interface changes 
+
+Eg. libphy.so.1
+
+Real Name
+=============
+
+Real Name is the actual name of the shared library file. 
+
+Real Name = soname + minor version number
+
+Eg. libphy.so.1.0
+
+It can also be libphy.so.1.0.1.3
+
+During shared library installation
+=====================================
+
+soname is a symbolic link to the real name
+
+linker name is a symbolic link to the soname
+
+In this way both soname and linker names ultimately point to the real name of the library (i.e. actual library file).
+
+Command to read the soname
+============================
+$ readelf -d libphy.so
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Write a Dynamic Library Recipe
+--------------------------------
+
+Name of the Recipe: mydynamic
+
+File Location:
+----------------
+
+.so 	->	${libdir}
+
+.h	-> 	${includedir}
+
+
+
+$ bitbake -e mydynamic | grep ^FILE:mydynamic=
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Why is libphy.so not present in the image
+-------------------------------------------
+
+The unversioned symbolic link is only used at development time.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Packaging Unversioned Libraries
+--------------------------------
+
+When shared libraries are built, they should be versioned but sometimes this is not done
+
+Some library vendors do not release source code for their software but do release pre-built binaries.
+
+You will get error when you add unversioned libraries.
+
+Because versioned libraries are far more common than unversioned libraries, the default packaging rules assume versioned libraries
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PACKAGING Unversioned Libraries
+-----------------------------------
+
+It follows that packaging an unversioned library requires a bit of work in the recipe.
+
+By default, "liblwl.so" gets packaged into ${PN}-dev, which triggers a QA warning that a non-symlink library is in a -dev package
+
+To solve this problem, you need to package the unversioned library into ${PN} where it belongs.
+
+Following are the abridged default FILES variables in bitbake.conf
+
+SOLIBS = ".so.*"
+SOLIBSDEV = ".so"
+FILES_${PN} = "... ${libdir}/lib*${SOLIBS} ..."
+FILES_SOLIBSDEV ?= "... ${libdir}/lib*${SOLIBSDEV} ..."
+FILES_${PN}-dev = "... ${FILES_SOLIBSDEV} ..."
+
+SOLIBS defines a pattern that matches real shared object libraries.
+SOLIBSDEV matches the development form (unversioned symlink).
+
+These two variables are then used in FILES_${PN} and FILES_${PN}-dev
+
+which puts the real libraries into ${PN} and the unversioned symbolic link into PN-dev.
+
+To package unversioned libraries, you need to modify the variables in the recipe as follows:
+
+SOLIBS = ".so"
+FILES_SOLIBSDEV = ""
+
+The modifications cause .so to be the real library and unsets FILES_SOLIBSDEV so that no libraries get packaged into PN-dev.
+
+
+
+
+
+the mydynamic_1.0.bb for unversioned library
+
+------------------------------------------------------------------------------------------------------
+mydynamic_1.0.bb
+------------------------------------------------------------------------------------------------------
+
+DESCRIPTION = "Simple C prog using Dynamic Library"
+
+LICENSE = "MIT"
+
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
+
+SRC_URI = "file://print.c \
+           file://arith.c \
+           file://mylib.h"
+
+S = "${WORKDIR}"
+
+do_compile() {
+         ${CC} -c -fPIC print.c arith.c
+         ${CC} ${LDFLAGS} -shared -o libphy.so *.o
+}
+
+do_install() {
+	
+	install -d ${D}${libdir}
+	install -m 0755 libphy.so ${D}${libdir}
+	install -d ${D}${includedir}
+	install -m 0644 mylib.h ${D}${includedir}
+
+}
+
+SOLIBS = ".so"
+FILES_SOLIBSDEV = ""
+
+------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------
+
+
+
+

@@ -1,0 +1,542 @@
+Dependencies
+---------------
+
+Most software packages have a short list of other packages that they require, which are called dependencies
+
+make menuconfig need ncurses library
+
+These dependencies fall into two main categories
+
+        build-time dependencies: required when the software is built
+
+        runtime dependencies: which are required to be installed on the target in order for the software to execute
+
+Examples
+----------
+
+Build Time Dependencies: 
+
+	Your software uses a particular library. For example pthread/openssl. 
+	Application cannot build without pthread/openssl library
+
+Run Time Dependencies:
+
+	If your software internally calls a particular command for example (lspci)
+
+	If your software uses run time loading of dynamic library (dlopen)
+
+	Application/Software can build, but need them during execution
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+Yocto Variables
+------------------
+
+There are two variables provided by Yocto to allow the specifications of dependencies
+
+DEPENDS
+
+	Specifies build-time dependencies, via a list of bitbake recipes to build prior to build the recipe
+
+RDEPENDS
+
+	Specifies run-time dependencies, via a list of packages to install prior to installing the current package
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+DEPENDS
+-----------
+
+Within a recipe, you can specify build time dependencies using DEPENDS variable
+
+It is important that you specify all build-time dependencies explicitly.
+
+When a recipe 'A' is DEPENDS on recipe 'B'. In this case, Bitbake first builds recipe 'B' and then recipe 'A'
+
+Example: Adding recipe1 to recipe2 as build dependency
+
+DEPENDS = "recipe1"
+
+The line above means that before the do_configure task of recipe2 can be run, the task do_populate_sysroot from recipe1 will have completed
+
+do_populate_sysroot
+--------------------
+
+Copies a subset of files installed by the do_install task into the appropriate sysroot
+
+Check the log of do_populate_sysroot in recipe2
+
+sysroot-destdir/: Contains a subset of files installed within do_install that have been put into the shared sysroot.
+
+
+do compile recipe stepby step
+
+$ bitbake -c fetch myhello		
+					cd {Workdir of myhello}		cd {workdir of mystatic}
+
+					$ tail -f log.task_order		$ tail -f log.task_order
+
+$ bitbake -c patch myhello
+
+$ bitbake -c listtasks myhello
+
+$ bitbake -c prepare_recipe_sysroot myhello
+
+$ bitbake -c configure myhello
+
+$ bitbake -c compile myhello
+
+$ bitbake myhello
+
+$ vim log.task_order
+
+$ find . -name userprog
+
+$ find . -name ReadMe.txt
+
+$ find . -name 'mylib.h'
+
+$ find . -name 'libphy.a'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Sharing Files Between Recipes
+------------------------------
+
+Recipes often need to use files provided by other recipes on the build host.
+
+For example, an application linking to a common library needs access to the library itself and its associated headers
+
+The way this access is accomplished is through the sysroot.
+
+One sysroot exists per "machine": 
+
+	a sysroot exists for the target machine
+
+	a sysroot exists for the build host.
+
+Subset of files installed into standard locations during the do_install task within the ${D} directory automatically goes into the sysroot.
+
+do_prepare_recipe_sysroot
+--------------------------
+
+This task sets up the two sysroots in ${WORKDIR} (i.e. recipe-sysroot and recipe-sysroot-native) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Try
+----
+
+Convert the myhello recipe to use 'static' and 'dynamic' library
+
+Check recipes-sysroot after you do 'bitbake -c configure myhello'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+RDEPENDS
+-------------
+
+Within a recipe, run time dependencies can be specified using RDEPENDS variable
+
+If your recipe says that T RDEPENDS on P, that tells bitbake that it must deploy P to the target system if it deploys T, because T can't be used without P
+
+Difference between DEPENDS and RDEPENDS
+-----------------------------------------
+
+DEPENDS List of the recipe build-time dependencies
+
+RDEPENDS List of the package runtime dependencies. Must be package specific (e.g. with _${PN})
+
+RDEPENDS_${PN} = "package_name"
+
+If T RDEPENDS on P then T's do_build task is made to depend on P's do_package_write task
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Try
+---------
+
+Write a recipe for a C Program which uses lspci system call
+
+
+
+
+goto myhello recipe and openfiles and then open userprog.c
+
+--------------
+userprog.c
+--------------
+
+#include <stdio.h>
+
+int main()
+{
+	printf("Welcome all SBCS Learners\n");
+	system("lspci");
+	return 0;
+}
+
+-----------------------------------------------------
+
+then open myhello_1.0.bb file
+
+---------------------------------------
+DESCRIPTION = "Simple helloworld application"
+
+LICENSE = "MIT"
+
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
+
+SRC_URI = "file://userprog.c "
+
+S = "${WORKDIR}"
+
+RDEPENDS:${PN} = "pciutils"
+
+do_compile() {
+	${CC} userprog.c ${LDFLAGS} -o userprog -lphy
+}
+
+do_install() {
+	install -d ${D}${bindir}
+        install -m 0755 userprog ${D}${bindir}
+}
+
+----------------------------------------------------------
+
+$ bitbake myhello
+$ bitbake phy-image
+$ runqemu nographic
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+lspci is provided by pciutils recipe
+
+Check what happens when you write
+
+RDEPENDS = "pciutils"
+
+Remove the ALLOW_EMPTY in mystatic recipe and resolve the error
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Dependency on a specific version
+---------------------------------
+
+Sometimes a recipe have dependencies on specific versions of another recipe.
+
+BitBake allows to reflect this by using:
+
+DEPENDS = "recipe-b (>= 1.2)"
+RDEPENDS_${PN} = "recipe-b (>= 1.2)"
+
+The following operators are supported: =, >, <, >= and <=.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Recipe Dependency Information
+-------------------------------
+
+Dependency information can help you understand why a recipe is built.
+
+To generate dependency information for a recipe, run the following command:
+
+$ bitbake -g recipename
+
+This command writes the following files in the current directory:
+
+pn-buildlist
+==============
+
+	A list of recipes/targets involved in building recipename. 
+
+	 "Involved" here means that at least one task from the recipe needs to run when building recipename from scratch
+
+task-depends.dot
+==================
+
+	A graph showing dependencies between tasks.
+
+The graphs are in DOT format and can be converted to images (e.g. using the dot tool from Graphviz).
+
+you can download it using 
+
+$ sudo apt install graphviz
+
+$ man dot
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DOT Format
+----------------
+
+The DOT format is a text description language for graphics that is understood by the GraphViz open source package and all utilities that use it
+
+$ dot -Tpdf task-depends.dot -o outfile.pdf
+
+$ evince outfile.pdf
+
+The most useful way to display dependency data is to ask Bitbake to display it graphically with the dependency explorer, as follows:
+
+bitbake -g -u taskexp recipename
+
+This command displays a GUI window from which you can view build-time and runtime dependencies for the recipes involved in building recipename
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+noexec
+--------
+
+When set to "1", marks the task as being empty, with no execution required.
+
+Eg: do_configure[noexec] = "1"
+    do_compile[noexec] = "1"
+
+This can be used to disable tasks which are defined elsewhere for example in a class that are not needed in a particular recipe
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Challenge
+----------
+
+Write a recipe which has both build time and run time dependencies

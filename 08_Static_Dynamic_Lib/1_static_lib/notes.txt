@@ -1,0 +1,199 @@
+Create Static Library
+=====================
+A static library is basically a set of object files that were copied into a single file with the suffix .a.
+
+The basic tool used to create static libraries is a program called ar (archiver).
+
+This program can be used to
+        create static libraries (also known as archive files),
+        modify object files in the static library,
+        list the names of object files in the library, etc.
+
+In order to create a static library, we have to perform two steps:
+
+        1.Create the object files from the source files of the project
+
+        2. Create the static library (the archive file) from the object files
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Create object Files
+=======================
+$gcc -c arith.c 
+
+$gcc -c print.c 
+
+Create Static library
+======================
+
+$ar rcs libphy.a arith.o print.o
+
+c -- create the archive if it doesn't exist
+
+r -- replace the older object files in the library, with the new object files
+
+s -- Write an object-file index into the archive
+
+        This index is later will be used by the compiler to speed up symbol-lookup inside the library
+
+Linking static library into application
+==========================================
+
+$ gcc userprog.c -o userprog -lphy -L.
+
+
+The -L flag indicates (a non standard) directory where the libraries can be found, else you can copy this in standard location (/usr/lib)
+
+The -l flag indicates the name of the library
+Note the -larith will be converted to libarith.a by the compiler
+
+
+
+$ gcc userprog.c -o userprog -I ../ -lphy -L ..
+
+
+if don't want to mention -I and -L then copy mylib.h and libphy.a in std location
+
+sudo cp ../mylib.h /usr/include/
+
+sudo cp ../libphy.a /usr/lib/
+
+$ gcc userprog.c -o userprog -lphy
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Write a Static Library Recipe
+--------------------------------
+
+Name of the Recipe: mystatic
+
+File Location:
+----------------
+
+.a 	->	${libdir}
+
+.h	-> 	${includedir}
+
+
+
+
+Create a recipe mystatic in recipes-example
+
+mkdir mystatic
+
+cd mystatic
+
+mkdir files
+
+copy print.c mylib.h and arith.c here
+
+write mystatic_1.0.bb recipe file
+
+$ bitbake mystatic
+
+$ tree images
+
+$ tree packages-split
+
+$ bitbake -e mystatic | grep ^FILES:mystatic-staticdev=
+
+add these packages in phy-image
+
+INSTALL_IMAGE += "mystatic-staticdev"
+
+
+
+
+
+
+
+
+ALLOW_EMPTY
+-------------
+
+By default, BitBake does not produce empty packages
+
+This default behavior can cause issues when there is an RDEPENDS or some other hard runtime requirement on the existence of the package
+
+ALLOW_EMPTY variable Specifies whether to produce an output package even if it is empty.
+
+Ex:
+
+ALLOW_EMPTY:${PN} = "1"
+ALLOW_EMPTY:${PN}-dev = "1"
+ALLOW_EMPTY:${PN}-staticdev = "1"
+
+
+
+
+
+
+
+
+
+
+
+
+
+

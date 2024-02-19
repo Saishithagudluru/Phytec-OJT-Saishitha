@@ -1,0 +1,160 @@
+		Other_Images
+	      ---------------
+	      
+	      
+	      
+	      
+	      
+IMAGE_LINGUAS
+--------------
+
+Specifies the list of locales to install into the image during the root filesystem construction process
+
+IMAGE_LINGUAS = "zh-cn"
+
+Inside qemu image
+$ locale -a
+
+
+
+
+
+
+
+
+
+
+IMAGE_FSTYPES
+----------------
+
+The IMAGE_FSTYPES variable determines the root filesystem image type
+
+If more than one format is specified, one image per format will be generated
+
+Image formats instructions are delivered in Poky: meta/classes/image_types.bbclass
+
+$ bitbake -e <image_name> | grep ^IMAGE_FSTYPES=
+
+Types supported
+-----------------
+
+btrfs
+     container
+     cpio
+     cpio.gz
+     cpio.lz4
+     cpio.lzma
+     cpio.xz
+     cramfs
+     elf
+     ext2
+     ext2.bz2
+     ext2.gz
+     ext2.lzma
+     ext3
+     ext3.gz
+     ext4
+     ext4.gz
+     f2fs
+     hddimg
+     iso
+     jffs2
+     jffs2.sum
+     multiubi
+     squashfs
+     squashfs-lz4
+     squashfs-lzo
+     squashfs-xz
+     tar
+     tar.bz2
+     tar.gz
+     tar.lz4
+     tar.xz
+     ubi
+     ubifs
+     wic
+     wic.bz2
+     wic.gz
+     wic.lzma
+
+
+
+
+
+
+
+
+
+
+
+
+Creating your own image type
+------------------------------
+
+If you have a particular layout on your storage (for example bootloader location on an SD card), you may want to create your own image type
+
+This is done through a class that inherits from image_types
+
+It has to define a function named IMAGE_CMD_<type>
+
+Example: sdcard_image-rpi.bbclass in meta-raspberrypi
+
+
+
+
+
+
+
+
+
+
+
+
+IMAGE_NAME
+----------------
+
+The name of the output image files minus the extension
+
+This variable is derived using the IMAGE_BASENAME, MACHINE, and DATETIME variables
+
+IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${DATETIME}"
+
+
+
+
+
+
+
+
+
+
+
+IMAGE_MANIFEST
+----------------
+
+The manifest file for the image
+
+This file lists all the installed packages that make up the image.
+
+The file contains package information on a line-per-package basis as follows:
+
+packagename packagearch version
+
+
+The image class defines the manifest file as follows:
+
+	IMAGE_MANIFEST = "${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.manifest"
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+

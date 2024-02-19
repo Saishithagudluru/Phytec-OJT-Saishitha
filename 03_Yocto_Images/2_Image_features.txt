@@ -1,0 +1,222 @@
+			Image_Features
+		      -----------------
+			
+			
+
+Customizing Images Using Custom IMAGE_FEATURES and EXTRA_IMAGE_FEATURES
+-----------------------------------------------------------------------
+
+Another method for customizing your image is to enable or disable high-level image features by using the IMAGE_FEATURES and EXTRA_IMAGE_FEATURES variables
+
+IMAGE_FEATURES/EXTRA_IMAGE_FEATURES is made to enable special features for your image, such as empty password for root, debug image, special packages, x11, splash, ssh-server
+
+What's the difference between IMAGE_FEATURES and EXTRA_IMAGE_FEATURES
+-----------------------------------------------------------------------
+
+Best practice is to 
+
+	Use IMAGE_FEATURES from a recipe
+
+	Use EXTRA_IMAGE_FEATURES from local.conf
+	
+	
+	
+	
+	
+	
+	
+
+How it works?
+---------------
+
+To understand how these features work, the best reference is meta/classes/core-image.bbclass
+
+This class lists out the available IMAGE_FEATURES of which most map to package groups while some, such as debug-tweaks and read-only-rootfs, resolve as general configuration settings
+
+In summary, the file looks at the contents of the IMAGE_FEATURES variable and then maps or configures the feature accordingly
+
+Based on this information, the build system automatically adds the appropriate packages or configurations to the IMAGE_INSTALL variable.
+
+
+
+
+
+
+
+
+
+
+Example of IMAGE_FEATURES
+---------------------------
+
+To illustrate how you can use these variables to modify your image, consider an example that selects the SSH server.
+
+The Yocto Project ships with two SSH servers you can use with your images: Dropbear and OpenSSH. 
+
+OpenSSH is a well-known standard SSH server implementation
+
+Dropbear is a minimal SSH server appropriate for resource-constrained environments
+
+By default, the core-image-sato image is configured to use Dropbear. The core-image-full-cmdline and core-image-lsb images both include OpenSSH.
+
+The core-image-minimal image does not contain an SSH server.
+
+
+vi poky/meta/recipes-core/images/core-image-base.bb
+
+vi poky/meta/recipes-extended/images/core-image-full-cmdline.bb
+
+vi poky/meta/recipes-sato/images/core-image-sato.bb
+
+vi poky/meta/recipes-core/images/core-image-minimal.bb
+
+
+
+
+
+debug-tweaks
+---------------
+
+In the default state, local.conf file has EXTRA_IMAGE_FEATURES set to "debug-tweaks"
+
+debug-tweaks features enable password-less login for the root user
+
+Advantage: makes logging in for debugging or inspection easy during development 
+
+Disadvantage: anyone can easily log in during production.
+
+So, you need to remove the 'debug-tweaks' feature from production image
+
+
+--------------------------------------------------------------------------------->
+
+In my image phy-image.bb add ssh dropbear feature and debug-tweaks
+	
+	IMAGE_FEATURES = "ssh-server-dropbear debug-tweaks"
+	
+go to buid terminal and check for IMAGE_FEATURES and IMAGE_INSTALL variable
+
+$ bitbake -e phy-image | grep ^IMAGE_FEATURES=
+
+$ bitbake -e phy-image | grep ^IMAGE_INSTALL=
+
+bitbake phy-image
+
+ruqemu phy-image nographic
+ 	ps -a
+ 
+--------------------------------------------------------------------------------->
+
+
+
+
+
+
+
+Read-Only Root Filesystem
+-----------------------------
+
+Why do we need read-only rootfs
+---------------------------------
+
+	Reduce wear on flash memory
+
+	Eliminate system file corruption
+	
+	
+-----------------------------------------------
+$runqemu phy-image nographic
+
+$touch f1.txt
+
+$echo "welcome all" 1> f1.txt
+
+$cat f1.txt
+
+$mount
+------------------------------------------------
+
+How to do it?
+---------------
+
+To create the read-only root filesystem, simply add the "read-only-rootfs" feature to your image.
+
+IMAGE_FEATURES = "read-only-rootfs" in your recipe
+
+	or
+
+EXTRA_IMAGE_FEATURES += "read-only-rootfs" in local.conf
+
+---->so to add read only filesystem feature in recipe 
+
+	IMAGE_FEATURES = "ssh-server-dropbear debug-tweaks read-only-rootfs"
+
+$ bitbake -e phy-image | grep ^IMAGE_INSTALL=
+
+bitbake phy-image
+
+ruqemu phy-image nographic
+
+mount
+
+touch f1.txt
+
+
+
+
+
+
+
+
+
+Boot Splash screen
+--------------------
+
+IMAGE_FEATURES += "splash"
+
+or
+
+EXTRA_IMAGE_FEATURES += "splash"
+
+---->so to add splash feature in recipe 
+
+	IMAGE_FEATURES = "ssh-server-dropbear debug-tweaks read-only-rootfs splash"
+
+$ bitbake -e phy-image | grep ^IMAGE_INSTALL=
+
+bitbake phy-image
+
+ruqemu phy-image
+
+
+
+
+
+
+
+
+
+
+
+Some other Features
+--------------------
+
+tools-debug: Installs debugging tools such as strace and gdb.
+
+tools-sdk: Installs a full SDK that runs on the device.
+
+---->so to add splash feature in recipe 
+
+	IMAGE_FEATURES = "ssh-server-dropbear debug-tweaks read-only-rootfs splash tools-debug tools-sdk"
+	
+	
+runqemu phy-image nographic
+
+	df -h
+	gcc -v
+	strace
+	gdb	
+	
+
+
+
